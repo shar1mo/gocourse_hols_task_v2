@@ -275,3 +275,5 @@ GroupUsersByAge(users) → nil, "duplicate name"
 - тутор по map-ам - [map tutorial golang](https://metanit.com/go/tutorial/2.14.php)
 
 - статья про fuzz-тесты на habr - [fuzzing-тесты](https://habr.com/ru/companies/selectel/articles/709248/)
+
+- понятные примеры по go - [go by example](https://gobyexample.com/)
