@@ -96,6 +96,8 @@ RemoveAt([]int{1,2,3,4,5}, 2) → [1,2,4,5], nil
 RemoveAt([]int{1,2,3}, 10) → nil, ошибка
 ```
 
+- Создаем локальный `slice` в функции и возвращаем из функции наш локальный `slice`, программа не должна менять(сломать) исходный `nums []int`
+
 ### task_02 - Unique
 
 - Функция: ```Unique(nums []int) []int```
@@ -180,7 +182,9 @@ GroupUsersByAge(users []User) (map[int][]User, error)
 
 возраст < 0 → `"invalid age"`
 
-повторяющееся имя → `"duplicate name"`
+повторяющееся имя → `"duplicate name"`, проверяем с помощью отдельного `map` (checking for duplicate names)
+
+- лучше всего писать только один цикл по всему `users []User` и делать все проверки внутри этого цикла
 
 Примеры:
 ```
