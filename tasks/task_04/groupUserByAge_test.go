@@ -29,11 +29,34 @@ func FuzzGroupUsersByAge(f *testing.F) {
 
 		grouped, err := task04.GroupUsersByAge(users)
 
-		if err != nil {
-			if err.Error() != "empty name" && err.Error() != "invalid age" && err.Error() != "duplicate name" {
-				t.Fatalf("unexpected error: %v", err)
+		for _, u := range users {
+			if u.Name == "" {
+				if err == nil || err.Error() != "empty name" {
+					t.Fatalf("expected empty name error for user %+v, got %v", u, err)
+				}
+				return
 			}
-			return
+			if u.Age < 0 {
+				if err == nil || err.Error() != "invalid age" {
+					t.Fatalf("expected invalid age error for user %+v, got %v", u, err)
+				}
+				return
+			}
+		}
+
+		seen := make(map[string]struct{})
+		for _, u := range users {
+			if _, ok := seen[u.Name]; ok {
+				if err == nil || err.Error() != "duplicate name" {
+					t.Fatalf("expected duplicate name error for user %+v, got %v", u, err)
+				}
+				return
+			}
+			seen[u.Name] = struct{}{}
+		}
+
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
 		}
 
 		for _, u := range users {
@@ -51,6 +74,21 @@ func FuzzGroupUsersByAge(f *testing.F) {
 			}
 			if !found {
 				t.Fatalf("user %+v not found in age group %d", u, u.Age)
+			}
+		}
+
+		for age, group := range grouped {
+			for _, gu := range group {
+				found := false
+				for _, u := range users {
+					if u == gu {
+						found = true
+						break
+					}
+				}
+				if !found {
+					t.Fatalf("unexpected user %+v in age group %d", gu, age)
+				}
 			}
 		}
 	})
